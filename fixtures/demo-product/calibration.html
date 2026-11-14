@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="zh"><meta charset="utf-8"><title>ProductFilm calibration</title>
+<style>body{margin:0;background:#101214;color:white;font:16px system-ui}video{width:100vw;height:100vh;object-fit:cover}button{position:absolute;top:12px;left:12px}</style>
+<video src="/anchor.mp4" preload="auto" playsinline></video><button type="button">播放校准片</button>
+<script>
+const video=document.querySelector("video");
+video.addEventListener("ended",()=>document.body.dataset.played="yes");
+function clock(now, frame) {
+  if (frame.mediaTime >= 0.5 && !document.body.dataset.flashAt) {
+    document.body.dataset.flashAt=String(frame.expectedDisplayTime);
+    document.body.dataset.flashMedia=String(frame.mediaTime);
+  }
+  video.requestVideoFrameCallback(clock);
+}
+video.requestVideoFrameCallback(clock);
+document.querySelector("button").onclick=()=>video.play();
+</script></html>

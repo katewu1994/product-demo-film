@@ -1,6 +1,6 @@
 # Codex 任务卡
 
-版本：v0.1 · 日期：2026-11-13 · 当前状态：全部待实施。
+版本：v0.1 · 日期：2026-11-13 · 状态与运行证据见本表及 [验证台账](VALIDATION_STATUS.md)。
 
 执行顺序与验证门槛见 [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md)。开发任务状态使用 `not_started / in_progress / blocked / done`；运行时 Job 使用 [DATA_MODEL.md](DATA_MODEL.md) 中的状态，不能混用。每次只把能提供证据的工作标记完成。
 
@@ -8,21 +8,25 @@
 
 | ID | 任务 | 状态 | 需求 | 验收 |
 | --- | --- | --- | --- | --- |
-| T00 | 环境与能力核查 | not_started | R13、R14 | AC13、AC14 |
-| T01 | 本地工作台与项目持久化 | not_started | R01、R12、R13 | AC01、AC12、AC13 |
-| T02 | 真实录制与原声采集验证 | not_started | R08、R09 | AC08、AC09 |
-| T03 | Codex 图片到 Omni 的真实验证 | not_started | R06、R12、R14 | AC06、AC12、AC14 |
-| T04 | 确定性时间轴与 FFmpeg 渲染 | not_started | R04、R10、R11 | AC04、AC10、AC11 |
-| T05 | 30–45 秒混合样片 | not_started | R06、R08–R12、R14 | AC06、AC08–AC12、AC14 的短片子集 |
+| T00 | 环境与能力核查 | done | R13、R14 | AC13、AC14 |
+| T01 | 本地工作台与项目持久化 | done | R01、R12、R13 | AC01、AC12、AC13 |
+| T02 | 真实录制与原声采集验证 | done | R08、R09 | AC08、AC09 |
+| T03 | Codex 图片到 Omni 的真实验证 | blocked | R06、R12、R14 | AC06、AC12、AC14 |
+| T04 | 确定性时间轴与 FFmpeg 渲染 | in_progress | R04、R10、R11 | AC04、AC10、AC11 |
+| T05 | 30–45 秒混合样片 | blocked | R06、R08–R12、R14 | AC06、AC08–AC12、AC14 的短片子集 |
 | T06 | 材料导入、事实提取与五段讲稿 | not_started | R02、R03 | AC02、AC03 |
 | T07 | 风格预设与图片分镜工作台 | not_started | R05、R06 | AC05、AC06 |
 | T08 | 演示步骤编辑、排练与正式录制 | not_started | R07、R08、R09 | AC07、AC08、AC09 |
 | T09 | 旁白、字幕和音轨安排 | not_started | R09、R10 | AC09、AC10 |
 | T10 | 总时长与段落预算调度 | not_started | R03、R04 | AC03、AC04 |
 | T11 | 完整界面与局部修改 | not_started | R01、R05、R07、R11、R12 | AC01、AC05、AC07、AC11、AC12 |
-| T12 | 可靠性、取消、恢复与缓存 | not_started | R12、R14 | AC12、AC14 |
+| T12 | 可靠性、取消、恢复与缓存 | in_progress | R12、R14 | AC12、AC14 |
 | T13 | 真实项目完整成片验收 | not_started | R01–R14 | AC01–AC14 |
 | T14 | 本机交付与使用说明 | not_started | R13、R14 | AC13、AC14 |
+
+本轮 T02 的 done 仅覆盖目标 Mac 上的本地有声测试网页。T04 已能从冻结的测试计划导出，通用时间轴、转场与多轨仍在开发。T03 缺本轮模型预算和 Gemini 配置；T05 另缺真实产品网址及可重复的原声场景。T12 已覆盖本地快照任务的租约、恢复与版本隔离。详细测量、失败实验和报告目录见 [验证台账](VALIDATION_STATUS.md)。
+
+T01 界面已更新为项目库、可跳转的五段时间预算和响应式编辑区。2026-11-14 的 Chrome 交互与布局复验见 [验证台账](VALIDATION_STATUS.md)。
 
 ## T00 — 环境与能力核查
 

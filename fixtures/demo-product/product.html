@@ -1,0 +1,12 @@
+<!doctype html>
+<html lang="zh"><meta charset="utf-8"><title>音色试听 · 测试网页</title>
+<style>body{background:#173029;color:#f4f4e4;font:24px system-ui;padding:8vh 7vw}button{padding:10px 24px;font:inherit}small{color:#c6dcb4}progress{display:block;width:70%;margin:2rem 0}</style>
+<small>ProductFilm 录音测试网页</small><h1>音色试听</h1><p>试听音 A · 660 Hz</p>
+<button type="button">播放试听音</button><progress value="0" max="2"></progress><p role="status">等待播放</p>
+<audio src="/tone.wav" preload="auto"></audio><script>
+const audio=document.querySelector("audio"),statusText=document.querySelector("[role=status]");
+document.querySelector("button").onclick=()=>audio.play();
+audio.onplay=()=>statusText.textContent="正在播放";
+audio.ontimeupdate=()=>document.querySelector("progress").value=audio.currentTime;
+audio.onended=()=>statusText.textContent="播放完毕";
+</script></html>

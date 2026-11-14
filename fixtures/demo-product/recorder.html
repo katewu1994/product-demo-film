@@ -1,0 +1,30 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><title>Fixture recorder</title>
+<button type="button" id="start">Start capture</button><button type="button" id="stop">Stop capture</button>
+<output id="state">idle</output><script>
+const state=document.querySelector("output");
+let recorder;
+const chunks=[];
+document.querySelector("#start").onclick=async()=>{
+ try {
+  const stream=await navigator.mediaDevices.getDisplayMedia({video:{displaySurface:"browser",frameRate:{ideal:30,max:30}},audio:true});
+  if(stream.getVideoTracks()[0]?.getSettings().displaySurface!=="browser") throw Error("wrong_capture_surface");
+  if(!stream.getAudioTracks().length) throw Error("audio_track_missing");
+  recorder=new MediaRecorder(stream,{mimeType:"video/webm;codecs=vp8,pcm"});
+  recorder.ondataavailable=event=>chunks.push(event.data);
+  recorder.onerror=()=>state.textContent="recorder_failed";
+  for(const track of stream.getTracks())track.onended=()=>state.textContent="track_ended";
+  recorder.onstop=()=>{
+    if(state.textContent!=="stopping")return;
+    const a=document.createElement("a");
+    a.href=URL.createObjectURL(new Blob(chunks,{type:recorder.mimeType}));
+    a.download="capture.webm";a.click();
+    stream.getTracks().forEach(track=>track.stop());
+  };
+  recorder.onstart=()=>state.textContent="recording";
+  recorder.start(250);
+ } catch(e){state.textContent=e.name+" "+e.message;}
+};
+document.querySelector("#stop").onclick=()=>{
+ if(state.textContent==="recording"){state.textContent="stopping";recorder.stop();}
+};
+</script></html>

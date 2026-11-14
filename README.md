@@ -1,10 +1,10 @@
-# ProductFilm — Codex 开发规格包 v0.1
+# ProductFilm — 本地产品介绍视频工作台
 
 Create product introduction videos with AI storyboards, animation, and real demos with original audio.
 
 **目的：把项目材料变成一支问题开头、包含真实产品操作和原声的 2–3 分钟介绍视频。**
 
-文档日期：2026-11-13。ProductFilm 仅为工作名，未做名称可用性或商标调查。当前是可实施的设计交付，不包含应用源码，也未完成模型调用、真实录音或整片验收。
+文档日期：2026-11-13。ProductFilm 仅为工作名，未做名称可用性或商标调查。已实现本地项目和五段讲稿工作台，并在本机用有声测试网页验证了录制与剪辑。模型生成、真实产品样片及整片验收仍待完成。
 
 ## 先读哪几个文件
 
@@ -18,15 +18,30 @@ Create product introduction videos with AI storyboards, animation, and real demo
 
 `AGENTS.md` 放在仓库根目录。Codex 官方文档说明它会发现项目路径上的指令文件；其余设计文档需要通过指令明确读取。[官方说明](https://learn.chatgpt.com/docs/agent-configuration/agents-md)
 
-## 使用方法
+## 本地启动
 
-1. 新项目：把本包内容放入新的项目仓库根目录，保留 `docs/` 与 `examples/`。
-2. 已有项目：先合并有效约束，不覆盖已有 AGENTS、README、实现和用户修改。保留本包的需求与验收链接。
-3. 在仓库根目录启动 Codex，发送 [启动指令](CODEX_START_PROMPT.md) 中的内容。
-4. Codex 从 T00 检查环境与当前实现，再按依赖完成最小任务；需要真实产品或凭据的步骤会标出具体缺项，并继续独立任务。
-5. 在工作台提供项目介绍、仓库与网址；选择内容语言、时长和风格预设。接受修改后的演示步骤与本轮生成预算后执行。
+首验环境为 macOS Apple Silicon。将 Node 24.22.1 和 pnpm 11.25.0 放入 PATH，安装完整 Google Chrome。本机 Codex 桌面环境的 Node 随运行时提供，若终端找不到 node，可先执行下面第一行。已有对应版本 Node 的环境可跳过第一行。
 
-本包中的 `pnpm` 命令是实现目标。当前没有 `package.json`，不能把命令列表当作已经可运行的软件。
+```sh
+export PATH="$HOME/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin:$PATH"
+pnpm install --frozen-lockfile
+pnpm run doctor
+pnpm dev
+```
+
+打开 [本地工作台](http://127.0.0.1:4317)。可导入 README 文本、保存仓库与网址引用、选择时长/语言/风格、编辑五段讲稿和运行快照自检。仓库与网址的自动分析尚待接入。生产启动使用 `pnpm build` 后执行 `pnpm start`。开发入口在启动时重建界面，更改源码后重新启动。
+
+数据默认写入 `~/Library/Application Support/ProductFilm/`，可用 `PRODUCTFILM_DATA_DIR` 指定项目数据库和报告根目录。验证时可用 `export PRODUCTFILM_DATA_DIR="$PWD/.productfilm"`。该目录已被 Git 忽略。本机 Chrome、FFmpeg 和 ffprobe 的路径可分别用 `PRODUCTFILM_CHROME`、`PRODUCTFILM_FFMPEG`、`PRODUCTFILM_FFPROBE` 指定。
+
+| 命令 | 实际范围 |
+| --- | --- |
+| `pnpm run doctor` | 记录本地工具、滤镜、编码器和提供方配置状态，输出 reports 下的 JSON。pnpm 11 的简写会运行包管理器自身的 doctor |
+| `pnpm verify` | lint、TypeScript、领域逻辑、SQLite/API/媒体集成测试、使用完整 Chrome 的工作台 e2e 与构建 |
+| `pnpm capture:fixture` | 启动独立 Chrome，录制受控本地测试标签页，检测校准音、试听音和首尾偏差 |
+| `pnpm render:fixture capture-<UUID>` | 使用通过校验的录制及两段无声测试色卡，从同一计划导出 30 秒预览与 1080p MP4；结果位于新建的 reports/render-* 下 |
+| `pnpm verify:live` | 当前返回 blocked 并以 2 退出。完整外部链路尚待实现 |
+
+继续开发从 [CODEX_START_PROMPT](CODEX_START_PROMPT.md) 和 [任务状态](docs/TASKS.md) 开始。本机实验数据见 [验证台账](docs/VALIDATION_STATUS.md)。
 
 ## 已确定需求与设计默认值
 
@@ -34,7 +49,7 @@ Create product introduction videos with AI storyboards, animation, and real demo
 | --- | --- |
 | 用户已确定 | 自用、独立可视化界面；介绍/README、代码仓库、可运行网址；真实操作及产品原声；AI 提步骤、用户修改后自动执行；Codex 图片分镜、Gemini Omni 动画；FFmpeg 剪辑；问题开头；段落比例可作为固定模板 |
 | 本文建议的默认值 | 本地 Web 工作台，首验 macOS Apple Silicon；150 秒、16:9、1080p、30 fps；五段预算 15/10/15/50/10；中文 UI、内容语言跟随输入；无用户音乐时不加 BGM |
-| 仍需运行验证 | Codex 当前安装的图片产物接口、Omni 账号/模型调用、Chrome 标签页原声与同步、实际 TTS、完整制作耗时和修改成本 |
+| 仍需运行验证 | Codex 当前安装的图片产物接口、Omni 账号/模型调用、用户产品的 Chrome 标签页原声与同步、实际 TTS、完整制作耗时和修改成本 |
 
 固定的是叙事顺序和默认预算；真实演示声音不能为了比例被变速。总时长冲突必须被显式解决。
 
@@ -47,8 +62,8 @@ Create product introduction videos with AI storyboards, animation, and real demo
 | 技术设计 | [ARCHITECTURE](docs/ARCHITECTURE.md)、[DATA_MODEL](docs/DATA_MODEL.md)、`docs/PROVIDERS.md`（待补充） |
 | 录制、声音与剪辑 | `docs/CAPTURE_AND_AUDIO.md`（待补充）、`docs/TIMELINE_AND_RENDERING.md`（待补充） |
 | 执行计划 | [IMPLEMENTATION_PLAN](docs/IMPLEMENTATION_PLAN.md)、[TASKS](docs/TASKS.md) |
-| 测试与验收 | `docs/TESTING.md`（待补充）、`docs/ACCEPTANCE_CRITERIA.md`（待补充）、`docs/VALIDATION_STATUS.md`（待补充） |
-| 决策与依据 | `docs/DECISIONS.md`（待补充）、`docs/REFERENCES.md`（待补充） |
+| 测试与验收 | `docs/TESTING.md`（待补充）、`docs/ACCEPTANCE_CRITERIA.md`（待补充）、[VALIDATION_STATUS](docs/VALIDATION_STATUS.md) |
+| 决策与依据 | [DECISIONS](docs/DECISIONS.md)、`docs/REFERENCES.md`（待补充） |
 | 数据示例 | `examples/project.example.json`（待补充）、`examples/demo-scenario.example.json`（待补充）、`examples/render-plan.example.json`（待补充） |
 
 数据示例是契约示例，引用的媒体文件并不存在，不代表生成结果。完整类型、约束和迁移规则以 DATA_MODEL 为准。

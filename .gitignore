@@ -1,0 +1,7 @@
+node_modules/
+dist/
+.productfilm/
+.pnpm-store/
+.DS_Store
+.env
+.env.*

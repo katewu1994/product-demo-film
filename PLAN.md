@@ -1,6 +1,6 @@
 # 计划入口
 
-状态：所有实施任务尚未开始。权威任务状态见 [TASKS](docs/TASKS.md)，不要在本文件维护第二份状态表。
+实施进度及剩余验证见任务表。权威任务状态见 [TASKS](docs/TASKS.md)，不要在本文件维护第二份状态表。
 
 ## 执行顺序
 
@@ -23,5 +23,5 @@
 
 ## 当前下一步
 
-把 [CODEX_START_PROMPT](CODEX_START_PROMPT.md) 交给仓库中的 Codex，从 T00 开始。遇到已经实现的内容，先核实并复用，再更新任务状态。
+按 [CODEX_START_PROMPT](CODEX_START_PROMPT.md) 从任务表接续。遇到已经实现的内容，先核实并复用，再更新任务状态。
 
